@@ -29,7 +29,7 @@ export default function AboutPage() {
   return (
     <div>
       {/* Hero */}
-      <section className="relative bg-gradient-to-br from-primary-dark to-primary pt-28 pb-20 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-primary-dark to-primary pt-36 pb-20 overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-20 -right-20 w-80 h-80 rounded-full bg-white/5 blur-2xl" />
           <div className="absolute bottom-0 left-0 w-60 h-60 rounded-full bg-white/5 blur-2xl" />

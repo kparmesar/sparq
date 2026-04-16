@@ -1,8 +1,10 @@
+import dynamic from "next/dynamic";
 import Hero from "@/components/home/Hero";
 import StatsBar from "@/components/home/StatsBar";
-import FeatureCards from "@/components/home/FeatureCards";
-import ActivityFeed from "@/components/home/ActivityFeed";
-import CTABanner from "@/components/home/CTABanner";
+
+const FeatureCards = dynamic(() => import("@/components/home/FeatureCards"));
+const ActivityFeed = dynamic(() => import("@/components/home/ActivityFeed"));
+const CTABanner = dynamic(() => import("@/components/home/CTABanner"));
 
 export default function Home() {
   return (

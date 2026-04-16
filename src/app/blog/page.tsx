@@ -18,7 +18,7 @@ export default function BlogPage() {
 
   return (
     <div>
-      <section className="bg-gradient-to-br from-primary-dark to-primary pt-28 pb-16 overflow-hidden relative">
+      <section className="bg-gradient-to-br from-primary-dark to-primary pt-36 pb-16 overflow-hidden relative">
         <div className="absolute inset-0">
           <div className="absolute -top-20 -right-20 w-80 h-80 rounded-full bg-white/5 blur-2xl" />
         </div>

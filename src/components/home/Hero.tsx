@@ -1,9 +1,13 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { SITE_TAGLINE } from "@/lib/constants";
-import ParticleField from "./ParticleField";
+
+const ParticleField = dynamic(() => import("./ParticleField"), {
+  ssr: false,
+});
 
 export default function Hero() {
   return (

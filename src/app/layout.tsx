@@ -10,6 +10,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://sparq.org.uk"
+  ),
   title: {
     default: "SPARQ — Severn Paediatric Audit, Research & Quality Improvement",
     template: "%s | SPARQ",
@@ -19,6 +22,14 @@ export const metadata: Metadata = {
   icons: {
     icon: "/sparq-logo.png",
     apple: "/sparq-logo.png",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_GB",
+    siteName: "SPARQ",
+  },
+  twitter: {
+    card: "summary_large_image",
   },
 };
 

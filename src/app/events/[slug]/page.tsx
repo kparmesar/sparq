@@ -34,7 +34,7 @@ export default async function EventDetailPage({
 
   return (
     <div>
-      <section className="bg-gradient-to-br from-primary-dark to-primary pt-28 pb-16">
+      <section className="bg-gradient-to-br from-primary-dark to-primary pt-36 pb-16">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <Link
             href="/events"
