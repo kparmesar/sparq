@@ -17,7 +17,7 @@ export default async function Home() {
   return (
     <>
       <Hero />
-      <StatsBar />
+      {/* <StatsBar /> */}
       <FeatureCards />
       <ActivityFeed projects={projects} events={events} showcaseItems={showcaseItems} />
       <CTABanner />
