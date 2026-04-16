@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { MOCK_BLOG_POSTS } from "@/lib/mock-data";
+import { MOCK_BLOG_POSTS as posts } from "@/lib/mock-data";
 import { formatDate } from "@/lib/utils";
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -13,8 +13,8 @@ const CATEGORY_COLORS: Record<string, string> = {
 };
 
 export default function BlogPage() {
-  const featured = MOCK_BLOG_POSTS.find((p) => p.featured);
-  const rest = MOCK_BLOG_POSTS.filter((p) => !p.featured);
+  const featured = posts.find((p) => p.featured);
+  const rest = posts.filter((p) => !p.featured);
 
   return (
     <div>

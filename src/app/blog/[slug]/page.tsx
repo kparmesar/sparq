@@ -1,10 +1,26 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { MOCK_BLOG_POSTS } from "@/lib/mock-data";
+import { getBlogPostBySlug, getAllBlogSlugs } from "@/lib/db/queries";
 import { formatDate } from "@/lib/utils";
 
-export function generateStaticParams() {
-  return MOCK_BLOG_POSTS.map((p) => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  const slugs = await getAllBlogSlugs();
+  return slugs.map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await getBlogPostBySlug(slug);
+  if (!post) return { title: "Post Not Found" };
+  return {
+    title: post.title,
+    description: post.excerpt.slice(0, 160),
+  };
 }
 
 export default async function BlogPostPage({
@@ -13,7 +29,7 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = MOCK_BLOG_POSTS.find((p) => p.slug === slug);
+  const post = await getBlogPostBySlug(slug);
   if (!post) notFound();
 
   return (

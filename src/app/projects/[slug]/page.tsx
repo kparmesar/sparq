@@ -1,6 +1,7 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { MOCK_PROJECTS } from "@/lib/mock-data";
+import { getProjectBySlug, getAllProjectSlugs } from "@/lib/db/queries";
 import { formatDate } from "@/lib/utils";
 
 const TYPE_COLORS: Record<string, string> = {
@@ -16,8 +17,23 @@ const STATUS_COLORS: Record<string, string> = {
   planned: "bg-blue-100 text-blue-800",
 };
 
-export function generateStaticParams() {
-  return MOCK_PROJECTS.map((p) => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  const slugs = await getAllProjectSlugs();
+  return slugs.map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const project = await getProjectBySlug(slug);
+  if (!project) return { title: "Project Not Found" };
+  return {
+    title: project.title,
+    description: project.description.slice(0, 160),
+  };
 }
 
 export default async function ProjectDetailPage({
@@ -26,7 +42,7 @@ export default async function ProjectDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const project = MOCK_PROJECTS.find((p) => p.slug === slug);
+  const project = await getProjectBySlug(slug);
   if (!project) notFound();
 
   return (
@@ -54,7 +70,7 @@ export default async function ProjectDetailPage({
             {project.title}
           </h1>
           <p className="mt-3 text-blue-200">
-            {project.leadAuthors.join(", ")} · Started {formatDate(project.startDate)}
+            {(project.leadAuthors ?? []).join(", ")} · Started {formatDate(project.startDate ?? "")}
           </p>
         </div>
       </section>

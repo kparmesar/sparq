@@ -1,10 +1,26 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { MOCK_EVENTS } from "@/lib/mock-data";
+import { getEventBySlug, getAllEventSlugs } from "@/lib/db/queries";
 import { formatDate } from "@/lib/utils";
 
-export function generateStaticParams() {
-  return MOCK_EVENTS.map((e) => ({ slug: e.slug }));
+export async function generateStaticParams() {
+  const slugs = await getAllEventSlugs();
+  return slugs.map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const event = await getEventBySlug(slug);
+  if (!event) return { title: "Event Not Found" };
+  return {
+    title: event.title,
+    description: event.description.slice(0, 160),
+  };
 }
 
 export default async function EventDetailPage({
@@ -13,7 +29,7 @@ export default async function EventDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const event = MOCK_EVENTS.find((e) => e.slug === slug);
+  const event = await getEventBySlug(slug);
   if (!event) notFound();
 
   return (
