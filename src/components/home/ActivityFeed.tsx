@@ -2,26 +2,32 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { MOCK_PROJECTS, MOCK_EVENTS, MOCK_SHOWCASE } from "@/lib/mock-data";
 import { formatDate } from "@/lib/utils";
+import type { Project, Event as DbEvent, ShowcaseItem } from "@/lib/db/schema";
 
-const TYPE_COLORS = {
+const TYPE_COLORS: Record<string, string> = {
   research: "bg-primary-light text-primary",
   qi: "bg-green-50 text-secondary",
   audit: "bg-red-50 text-accent-coral",
 };
 
-const STATUS_COLORS = {
+const STATUS_COLORS: Record<string, string> = {
   active: "bg-green-100 text-green-800",
   completed: "bg-neutral-100 text-neutral-600",
   recruiting: "bg-yellow-100 text-yellow-800",
   planned: "bg-blue-100 text-blue-800",
 };
 
-export default function ActivityFeed() {
-  const latestProjects = MOCK_PROJECTS.slice(0, 3);
-  const latestEvents = MOCK_EVENTS.slice(0, 2);
-  const latestShowcase = MOCK_SHOWCASE.slice(0, 2);
+interface ActivityFeedProps {
+  projects: Project[];
+  events: DbEvent[];
+  showcaseItems: ShowcaseItem[];
+}
+
+export default function ActivityFeed({ projects, events, showcaseItems }: ActivityFeedProps) {
+  const latestProjects = projects;
+  const latestEvents = events;
+  const latestShowcase = showcaseItems;
 
   return (
     <section className="py-20 bg-neutral-50">
