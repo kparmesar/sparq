@@ -8,7 +8,14 @@ export default function ContactPage() {
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    // In production, this would be a server action posting to Neon
+    const form = e.currentTarget;
+    const name = (form.elements.namedItem("name") as HTMLInputElement).value;
+    const email = (form.elements.namedItem("email") as HTMLInputElement).value;
+    const subject = (form.elements.namedItem("subject") as HTMLSelectElement).value;
+    const message = (form.elements.namedItem("message") as HTMLTextAreaElement).value;
+
+    const body = `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\n\n${message}`;
+    window.location.href = `mailto:hello@sparq.org.uk?subject=${encodeURIComponent(subject + " — SPARQ Contact Form")}&body=${encodeURIComponent(body)}`;
     setSubmitted(true);
   }
 

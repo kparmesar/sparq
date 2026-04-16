@@ -11,7 +11,7 @@ const ParticleField = dynamic(() => import("./ParticleField"), {
 
 export default function Hero() {
   return (
-    <section className="relative min-h-[75vh] flex items-center overflow-hidden">
+    <section className="relative min-h-[75vh] flex items-center overflow-hidden pt-16">
       {/* Animated gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#0f1b3d] via-[#1a2f6e] to-[#1D4ED8] animate-gradient" />
 
