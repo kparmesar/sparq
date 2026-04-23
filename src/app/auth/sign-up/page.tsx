@@ -1,11 +1,27 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { useActionState } from "react";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { signUpWithEmail } from "./actions";
 
-export default function SignUpPage() {
+const ALLOWED_DOMAINS = ["nhs.net", "bristol.ac.uk"];
+
+function isEmailDomainValid(email: string) {
+  const domain = email.split("@")[1]?.toLowerCase();
+  if (!domain) return null; // not yet typed
+  return ALLOWED_DOMAINS.some((d) => domain === d || domain.endsWith(`.${d}`));
+}
+
+function SignUpForm() {
   const [state, formAction, pending] = useActionState(signUpWithEmail, null);
+  const searchParams = useSearchParams();
+  const message = searchParams.get("message");
+  const [email, setEmail] = useState("");
+
+  const domainCheck = email.includes("@") ? isEmailDomainValid(email) : null;
 
   return (
     <div>
@@ -24,6 +40,11 @@ export default function SignUpPage() {
       <section className="py-12 bg-neutral-50">
         <div className="mx-auto max-w-md px-4">
           <div className="bg-white rounded-2xl shadow-lg border border-neutral-200 p-8">
+            {message && (
+              <div className="mb-4 p-3 rounded-lg bg-blue-50 text-blue-700 text-sm font-medium">
+                {message}
+              </div>
+            )}
             {state?.error && (
               <div className="mb-4 p-3 rounded-lg bg-red-50 text-red-700 text-sm font-medium">
                 {state.error}
@@ -61,8 +82,31 @@ export default function SignUpPage() {
                   name="email"
                   required
                   autoComplete="email"
-                  className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className={`w-full px-4 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 ${
+                    domainCheck === false
+                      ? "border-red-300 focus:border-red-400"
+                      : domainCheck === true
+                        ? "border-green-300 focus:border-green-400"
+                        : "border-neutral-200 focus:border-primary"
+                  }`}
                 />
+                {domainCheck === false && (
+                  <p className="text-xs text-red-500 mt-1">
+                    Only @nhs.net and @bristol.ac.uk emails are allowed.
+                  </p>
+                )}
+                {domainCheck === true && (
+                  <p className="text-xs text-green-600 mt-1">
+                    ✓ Valid email domain
+                  </p>
+                )}
+                {domainCheck === null && email === "" && (
+                  <p className="text-xs text-neutral-400 mt-1">
+                    Use your @nhs.net or @bristol.ac.uk email
+                  </p>
+                )}
               </div>
 
               <div>
@@ -88,7 +132,7 @@ export default function SignUpPage() {
 
               <button
                 type="submit"
-                disabled={pending}
+                disabled={pending || domainCheck === false}
                 className="w-full px-4 py-2.5 bg-primary text-white rounded-xl font-semibold text-sm hover:bg-primary-dark transition-colors disabled:opacity-50"
               >
                 {pending ? "Creating account..." : "Create Account"}
@@ -108,5 +152,13 @@ export default function SignUpPage() {
         </div>
       </section>
     </div>
+  );
+}
+
+export default function SignUpPage() {
+  return (
+    <Suspense>
+      <SignUpForm />
+    </Suspense>
   );
 }

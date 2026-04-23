@@ -28,7 +28,14 @@ export async function middleware(request: NextRequest) {
       request.cookies.get("better-auth.session_token")?.value ||
       request.cookies.get("__Secure-better-auth.session_token")?.value;
     if (!hasSession) {
-      return NextResponse.redirect(new URL("/auth/sign-in", request.url));
+      const signInUrl = new URL("/auth/sign-in", request.url);
+      if (pathname.startsWith("/projects")) {
+        signInUrl.searchParams.set(
+          "message",
+          "Sign in or create an account to view projects."
+        );
+      }
+      return NextResponse.redirect(signInUrl);
     }
   }
 

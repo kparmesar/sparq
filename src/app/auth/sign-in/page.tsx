@@ -2,10 +2,14 @@
 
 import Link from "next/link";
 import { useActionState } from "react";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { signInWithEmail } from "./actions";
 
-export default function SignInPage() {
+function SignInForm() {
   const [state, formAction, pending] = useActionState(signInWithEmail, null);
+  const searchParams = useSearchParams();
+  const message = searchParams.get("message");
 
   return (
     <div>
@@ -23,6 +27,11 @@ export default function SignInPage() {
       <section className="py-12 bg-neutral-50">
         <div className="mx-auto max-w-md px-4">
           <div className="bg-white rounded-2xl shadow-lg border border-neutral-200 p-8">
+            {message && (
+              <div className="mb-4 p-3 rounded-lg bg-blue-50 text-blue-700 text-sm font-medium">
+                {message}
+              </div>
+            )}
             {state?.error && (
               <div className="mb-4 p-3 rounded-lg bg-red-50 text-red-700 text-sm font-medium">
                 {state.error}
@@ -76,7 +85,7 @@ export default function SignInPage() {
             <p className="text-center text-sm text-neutral-500 mt-6">
               Don&apos;t have an account?{" "}
               <Link
-                href="/auth/sign-up"
+                href={`/auth/sign-up${message ? `?message=${encodeURIComponent(message)}` : ""}`}
                 className="text-primary font-medium hover:underline"
               >
                 Join SPARQ
@@ -86,5 +95,13 @@ export default function SignInPage() {
         </div>
       </section>
     </div>
+  );
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense>
+      <SignInForm />
+    </Suspense>
   );
 }
