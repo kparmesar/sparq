@@ -72,10 +72,10 @@ export default function Hero() {
             </svg>
           </Link>
           <Link
-            href="/contact"
+            href="/auth/sign-up"
             className="inline-flex items-center justify-center px-8 py-3.5 text-base font-semibold text-white border-2 border-white/30 rounded-xl backdrop-blur-sm hover:bg-white/10 transition-all"
           >
-            Get Involved
+            Sign Up
           </Link>
         </motion.div>
       </div>

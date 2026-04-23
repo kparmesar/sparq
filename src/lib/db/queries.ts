@@ -5,14 +5,16 @@ import {
   events,
   showcase,
   blogPosts,
+  userPreferences,
   type Project,
   type Event as DbEvent,
   type ShowcaseItem,
   type BlogPost,
+  type UserPreference,
 } from "./schema";
 
 // Re-export types for convenience
-export type { Project, DbEvent, ShowcaseItem, BlogPost };
+export type { Project, DbEvent, ShowcaseItem, BlogPost, UserPreference };
 
 // --------------- Projects ---------------
 
@@ -116,4 +118,26 @@ export async function getUpcomingEvents(limit = 3): Promise<DbEvent[]> {
 
 export async function getLatestShowcase(limit = 3): Promise<ShowcaseItem[]> {
   return db.select().from(showcase).orderBy(desc(showcase.date)).limit(limit);
+}
+
+// --------------- User Preferences ---------------
+
+export async function getUserPreferences(userId: string): Promise<UserPreference | undefined> {
+  const rows = await db.select().from(userPreferences).where(eq(userPreferences.userId, userId)).limit(1);
+  return rows[0];
+}
+
+export async function upsertUserPreferences(
+  userId: string,
+  prefs: Partial<Omit<UserPreference, "id" | "userId" | "createdAt" | "updatedAt">>
+): Promise<void> {
+  const existing = await getUserPreferences(userId);
+  if (existing) {
+    await db
+      .update(userPreferences)
+      .set({ ...prefs, updatedAt: new Date() })
+      .where(eq(userPreferences.userId, userId));
+  } else {
+    await db.insert(userPreferences).values({ userId, ...prefs });
+  }
 }

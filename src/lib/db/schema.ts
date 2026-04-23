@@ -98,6 +98,19 @@ export const blogPosts = pgTable("blog_posts", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
+// --- User Preferences ---
+export const userPreferences = pgTable("user_preferences", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id", { length: 255 }).notNull().unique(),
+  notifyEvents: boolean("notify_events").notNull().default(false),
+  notifyProjects: boolean("notify_projects").notNull().default(false),
+  projectTypes: text("project_types").array().notNull().default([]),
+  projectSites: text("project_sites").array().notNull().default([]),
+  projectKeywords: text("project_keywords").array().notNull().default([]),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
 // --- Types ---
 export type Project = typeof projects.$inferSelect;
 export type NewProject = typeof projects.$inferInsert;
@@ -107,3 +120,5 @@ export type ShowcaseItem = typeof showcase.$inferSelect;
 export type NewShowcaseItem = typeof showcase.$inferInsert;
 export type BlogPost = typeof blogPosts.$inferSelect;
 export type NewBlogPost = typeof blogPosts.$inferInsert;
+export type UserPreference = typeof userPreferences.$inferSelect;
+export type NewUserPreference = typeof userPreferences.$inferInsert;

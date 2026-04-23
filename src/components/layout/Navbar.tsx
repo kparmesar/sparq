@@ -2,12 +2,22 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { NAV_LINKS } from "@/lib/constants";
+import { authClient } from "@/lib/auth/client";
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [user, setUser] = useState<{ name: string } | null>(null);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    authClient.getSession().then(({ data }) => {
+      setUser(data?.user ?? null);
+      setLoaded(true);
+    });
+  }, []);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-neutral-200">
@@ -36,12 +46,21 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <Link
-              href="/contact"
-              className="ml-2 px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg transition-all hover:bg-primary-dark hover:scale-105"
-            >
-              Get Involved
-            </Link>
+            {loaded && user ? (
+              <Link
+                href="/account"
+                className="ml-2 px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg transition-all hover:bg-primary-dark hover:scale-105"
+              >
+                My Account
+              </Link>
+            ) : (
+              <Link
+                href="/auth/sign-up"
+                className="ml-2 px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg transition-all hover:bg-primary-dark hover:scale-105"
+              >
+                Sign Up
+              </Link>
+            )}
           </div>
 
           {/* Mobile hamburger */}
@@ -80,6 +99,23 @@ export default function Navbar() {
                     {link.label}
                   </Link>
                 ))}
+                {loaded && user ? (
+                  <Link
+                    href="/account"
+                    onClick={() => setMobileOpen(false)}
+                    className="block px-3 py-2 text-base font-medium text-primary rounded-lg hover:bg-primary-light"
+                  >
+                    My Account
+                  </Link>
+                ) : (
+                  <Link
+                    href="/auth/sign-up"
+                    onClick={() => setMobileOpen(false)}
+                    className="block px-3 py-2 text-base font-medium text-primary rounded-lg hover:bg-primary-light"
+                  >
+                    Sign Up
+                  </Link>
+                )}
               </div>
             </motion.div>
           )}

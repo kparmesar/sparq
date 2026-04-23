@@ -42,10 +42,10 @@ export default function CTABanner() {
           className="mt-8 flex flex-col sm:flex-row gap-4 justify-center"
         >
           <Link
-            href="/contact"
+            href="/auth/sign-up"
             className="inline-flex items-center justify-center px-6 py-3 text-base font-semibold text-primary bg-white rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all"
           >
-            Get Involved
+            Sign Up
           </Link>
           <Link
             href="/projects"
