@@ -42,9 +42,7 @@ function SignInForm() {
       if (!res.ok) {
         const data = await res.json().catch(() => null);
         if (data?.code === "EMAIL_NOT_VERIFIED") {
-          setVerifyEmail(email);
-          setError("Please verify your email address before signing in. Check your inbox for a verification link.");
-          setPending(false);
+          router.push("/auth/verify-email?email=" + encodeURIComponent(email));
           return;
         }
         setError(data?.message || "Invalid credentials.");

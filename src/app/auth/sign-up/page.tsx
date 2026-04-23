@@ -75,7 +75,7 @@ function SignUpForm() {
       return;
     }
 
-    router.push("/auth/sign-in?message=" + encodeURIComponent("Account created! Please check your email to verify your address, then sign in."));
+    router.push("/auth/verify-email?email=" + encodeURIComponent(emailVal));
   }
 
   return (
