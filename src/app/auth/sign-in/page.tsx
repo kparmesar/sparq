@@ -11,14 +11,10 @@ function SignInForm() {
   const message = searchParams.get("message");
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
-  const [verifyEmail, setVerifyEmail] = useState("");
-  const [verificationSent, setVerificationSent] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
-    setVerifyEmail("");
-    setVerificationSent(false);
     setPending(true);
 
     const formData = new FormData(e.currentTarget);
@@ -59,20 +55,6 @@ function SignInForm() {
     router.refresh();
   }
 
-  async function resendVerification() {
-    if (!verifyEmail) return;
-    try {
-      await fetch("/api/auth/send-verification-email", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: verifyEmail }),
-      });
-      setVerificationSent(true);
-    } catch {
-      // ignore
-    }
-  }
-
   return (
     <div>
       <section className="bg-gradient-to-br from-primary-dark to-primary pt-36 pb-16">
@@ -97,20 +79,6 @@ function SignInForm() {
             {error && (
               <div className="mb-4 p-3 rounded-lg bg-red-50 text-red-700 text-sm font-medium">
                 {error}
-                {verifyEmail && !verificationSent && (
-                  <button
-                    type="button"
-                    onClick={resendVerification}
-                    className="block mt-2 text-primary font-medium hover:underline"
-                  >
-                    Resend verification email
-                  </button>
-                )}
-                {verificationSent && (
-                  <p className="mt-2 text-green-700">
-                    Verification email sent! Check your inbox.
-                  </p>
-                )}
               </div>
             )}
 
