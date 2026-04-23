@@ -22,13 +22,19 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Protect /account routes — check for Neon Auth session cookie
-  if (pathname.startsWith("/account")) {
+  // Protect /account and /projects routes — check for Neon Auth session cookie
+  if (pathname.startsWith("/account") || pathname.startsWith("/projects")) {
     const hasSession =
       request.cookies.get("__Secure-neon-auth.session_token")?.value ||
       request.cookies.get("neon-auth.session_token")?.value;
     if (!hasSession) {
-      return NextResponse.redirect(new URL("/auth/sign-in", request.url));
+      const signInUrl = new URL("/auth/sign-in", request.url);
+      signInUrl.searchParams.set(
+        "message",
+        "Sign in or create an account to view projects."
+      );
+      signInUrl.searchParams.set("callbackUrl", pathname);
+      return NextResponse.redirect(signInUrl);
     }
   }
 
@@ -36,5 +42,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/account/:path*"],
+  matcher: ["/admin/:path*", "/account/:path*", "/projects/:path*"],
 };

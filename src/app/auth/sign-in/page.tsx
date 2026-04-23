@@ -9,6 +9,7 @@ function SignInForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const message = searchParams.get("message");
+  const callbackUrl = searchParams.get("callbackUrl") || "/account";
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
 
@@ -51,7 +52,7 @@ function SignInForm() {
       return;
     }
 
-    router.push("/account");
+    router.push(callbackUrl);
     router.refresh();
   }
 
