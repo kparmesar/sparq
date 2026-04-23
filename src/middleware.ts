@@ -22,8 +22,8 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Protect /account routes — check for Neon Auth session cookie
-  if (pathname.startsWith("/account")) {
+  // Protect /account and /projects routes — check for Neon Auth session cookie
+  if (pathname.startsWith("/account") || pathname.startsWith("/projects")) {
     const hasSession =
       request.cookies.get("better-auth.session_token")?.value ||
       request.cookies.get("__Secure-better-auth.session_token")?.value;
@@ -36,5 +36,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/account/:path*"],
+  matcher: ["/admin/:path*", "/account/:path*", "/projects/:path*"],
 };
