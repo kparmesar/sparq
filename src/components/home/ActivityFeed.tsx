@@ -41,9 +41,9 @@ export default function ActivityFeed({ projects, events, showcaseItems }: Activi
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
           {/* Projects */}
-          <div>
+          <div className="flex flex-col">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-bold text-neutral-900">Projects</h3>
               <Link
@@ -53,7 +53,7 @@ export default function ActivityFeed({ projects, events, showcaseItems }: Activi
                 View All →
               </Link>
             </div>
-            <div className="space-y-3">
+            <div className="space-y-3 flex-1">
               {latestProjects.map((project, i) => (
                 <motion.div
                   key={project.id}
@@ -91,7 +91,7 @@ export default function ActivityFeed({ projects, events, showcaseItems }: Activi
           </div>
 
           {/* Events */}
-          <div>
+          <div className="flex flex-col">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-bold text-neutral-900">
                 Upcoming Events
@@ -103,7 +103,7 @@ export default function ActivityFeed({ projects, events, showcaseItems }: Activi
                 View All →
               </Link>
             </div>
-            <div className="space-y-3">
+            <div className="space-y-3 flex-1">
               {latestEvents.map((event, i) => (
                 <motion.div
                   key={event.id}
@@ -143,7 +143,7 @@ export default function ActivityFeed({ projects, events, showcaseItems }: Activi
           </div>
 
           {/* Showcase */}
-          <div>
+          <div className="flex flex-col">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-bold text-neutral-900">Showcase</h3>
               <Link
@@ -153,7 +153,7 @@ export default function ActivityFeed({ projects, events, showcaseItems }: Activi
                 View All →
               </Link>
             </div>
-            <div className="space-y-3">
+            <div className="space-y-3 flex-1">
               {latestShowcase.map((item, i) => (
                 <motion.div
                   key={item.id}

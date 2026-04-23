@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { eq } from "drizzle-orm";
 import { db } from "@/lib/db/index";
 import { blogPosts, projects, showcase, events } from "@/lib/db/schema";
+import { notifyNewEvent, notifyNewProject } from "@/lib/notifications";
 
 function slugify(text: string): string {
   return text
@@ -78,9 +79,11 @@ export async function createProject(formData: FormData) {
   const site = formData.getAll("site").map((s) => String(s)).filter(Boolean);
   const contactEmail = (formData.get("contactEmail") as string) || null;
 
+  const slug = slugify(title);
+
   await db.insert(projects).values({
     title,
-    slug: slugify(title),
+    slug,
     description,
     type,
     status,
@@ -89,6 +92,15 @@ export async function createProject(formData: FormData) {
     site,
     contactEmail,
     startDate: new Date().toISOString(),
+  });
+
+  // Send notifications (non-blocking)
+  notifyNewProject({
+    title,
+    type,
+    status,
+    site: site[0],
+    slug,
   });
 
   revalidatePath("/projects");
@@ -189,15 +201,31 @@ export async function createEvent(formData: FormData) {
   const isVirtual = formData.get("isVirtual") === "on";
   const registrationUrl = (formData.get("registrationUrl") as string) || null;
 
+  const slug = slugify(title);
+  const dateStr = new Date(date).toISOString();
+
   await db.insert(events).values({
     title,
-    slug: slugify(title),
+    slug,
     description,
-    date: new Date(date).toISOString(),
+    date: dateStr,
     endDate: endDate ? new Date(endDate).toISOString() : null,
     location: isVirtual ? "Virtual" : location,
     isVirtual,
     registrationUrl,
+  });
+
+  // Send notifications (non-blocking)
+  notifyNewEvent({
+    title,
+    date: new Date(date).toLocaleDateString("en-GB", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }),
+    location: isVirtual ? "Virtual" : location,
+    slug,
   });
 
   revalidatePath("/events");
