@@ -103,11 +103,11 @@ export default function PreferencesForm({ prefs }: { prefs: UserPreference | nul
             <label className="block text-sm font-medium text-neutral-700 mb-2">
               Sites of interest
             </label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 p-3 rounded-xl border border-neutral-200 bg-neutral-50 max-h-48 overflow-y-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {SITE_OPTIONS.map((site) => (
                 <label
                   key={site}
-                  className="flex items-center gap-2 text-sm text-neutral-700 cursor-pointer hover:bg-white rounded-lg px-2 py-1.5"
+                  className="flex items-center gap-2 text-sm text-neutral-700 cursor-pointer hover:bg-neutral-50 rounded-lg px-2 py-1.5"
                 >
                   <input
                     type="checkbox"

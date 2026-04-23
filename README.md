@@ -129,3 +129,8 @@ Open [http://localhost:3000](http://localhost:3000).
 ## Deployment
 
 Deployed automatically to Vercel on push to `main`. DNS for `sparq.org.uk` points to Vercel.
+
+## Future Works
+
+- Network and profiles
+- ORCID import of projects for showcase
