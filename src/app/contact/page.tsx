@@ -2,21 +2,31 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { sendContactEmail } from "./actions";
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
+  const [pending, setPending] = useState(false);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const form = e.currentTarget;
-    const name = (form.elements.namedItem("name") as HTMLInputElement).value;
-    const email = (form.elements.namedItem("email") as HTMLInputElement).value;
-    const subject = (form.elements.namedItem("subject") as HTMLSelectElement).value;
-    const message = (form.elements.namedItem("message") as HTMLTextAreaElement).value;
+    setError("");
+    setPending(true);
 
-    const body = `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\n\n${message}`;
-    window.location.href = `mailto:hello@sparq.org.uk?subject=${encodeURIComponent(subject + " — SPARQ Contact Form")}&body=${encodeURIComponent(body)}`;
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    const result = await sendContactEmail(formData);
+
+    if (result.error) {
+      setError(result.error);
+      setPending(false);
+      return;
+    }
+
     setSubmitted(true);
+    setPending(false);
   }
 
   return (
@@ -144,11 +154,18 @@ export default function ContactPage() {
                 <input type="text" name="website" tabIndex={-1} autoComplete="off" />
               </div>
 
+              {error && (
+                <div className="p-3 rounded-lg bg-red-50 text-red-700 text-sm font-medium">
+                  {error}
+                </div>
+              )}
+
               <button
                 type="submit"
-                className="w-full px-6 py-3 bg-primary text-white rounded-xl font-semibold hover:bg-primary-dark transition-colors hover:scale-[1.02] active:scale-100"
+                disabled={pending}
+                className="w-full px-6 py-3 bg-primary text-white rounded-xl font-semibold hover:bg-primary-dark transition-colors hover:scale-[1.02] active:scale-100 disabled:opacity-50"
               >
-                Send Message
+                {pending ? "Sending..." : "Send Message"}
               </button>
             </motion.form>
           )}
