@@ -1,15 +1,47 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Suspense } from "react";
-import { signInWithEmail } from "./actions";
+import { authClient } from "@/lib/auth/client";
 
 function SignInForm() {
-  const [state, formAction, pending] = useActionState(signInWithEmail, null);
   const searchParams = useSearchParams();
+  const router = useRouter();
   const message = searchParams.get("message");
+  const [error, setError] = useState("");
+  const [pending, setPending] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setError("");
+    setPending(true);
+
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+
+    if (!email || !password) {
+      setError("Email and password are required.");
+      setPending(false);
+      return;
+    }
+
+    const { error: authError } = await authClient.signIn.email({
+      email,
+      password,
+    });
+
+    if (authError) {
+      setError(authError.message || "Invalid credentials.");
+      setPending(false);
+      return;
+    }
+
+    router.push("/account");
+    router.refresh();
+  }
 
   return (
     <div>
@@ -32,13 +64,13 @@ function SignInForm() {
                 {message}
               </div>
             )}
-            {state?.error && (
+            {error && (
               <div className="mb-4 p-3 rounded-lg bg-red-50 text-red-700 text-sm font-medium">
-                {state.error}
+                {error}
               </div>
             )}
 
-            <form action={formAction} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label
                   htmlFor="email"

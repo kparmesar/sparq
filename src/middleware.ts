@@ -25,8 +25,8 @@ export async function middleware(request: NextRequest) {
   // Protect /account and /projects routes — check for Neon Auth session cookie
   if (pathname.startsWith("/account") || pathname.startsWith("/projects")) {
     const hasSession =
-      request.cookies.get("better-auth.session_token")?.value ||
-      request.cookies.get("__Secure-better-auth.session_token")?.value;
+      request.cookies.get("__Secure-neon-auth.session_token")?.value ||
+      request.cookies.get("neon-auth.session_token")?.value;
     if (!hasSession) {
       const signInUrl = new URL("/auth/sign-in", request.url);
       if (pathname.startsWith("/projects")) {
