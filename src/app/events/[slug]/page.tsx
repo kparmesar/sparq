@@ -68,7 +68,7 @@ export default async function EventDetailPage({
 
       <section className="py-12 bg-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <p className="text-neutral-600 text-lg leading-relaxed">
+          <p className="text-neutral-600 text-lg leading-relaxed whitespace-pre-line">
             {event.description}
           </p>
 

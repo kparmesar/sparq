@@ -79,7 +79,7 @@ export default async function ProjectDetailPage({
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <div className="prose prose-neutral max-w-none">
             <h2 className="text-xl font-bold text-neutral-900 mb-4">Description</h2>
-            <p className="text-neutral-600 leading-relaxed text-lg">
+            <p className="text-neutral-600 leading-relaxed text-lg whitespace-pre-line">
               {project.description}
             </p>
           </div>
