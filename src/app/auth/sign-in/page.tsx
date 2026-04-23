@@ -28,13 +28,19 @@ function SignInForm() {
       return;
     }
 
-    const { error: authError } = await authClient.signIn.email({
-      email,
-      password,
-    });
+    try {
+      const result = await authClient.signIn.email({
+        email,
+        password,
+      });
 
-    if (authError) {
-      setError(authError.message || "Invalid credentials.");
+      if (result.error) {
+        setError(result.error.message || "Invalid credentials.");
+        setPending(false);
+        return;
+      }
+    } catch {
+      setError("Something went wrong. Please try again.");
       setPending(false);
       return;
     }
@@ -114,7 +120,16 @@ function SignInForm() {
               </button>
             </form>
 
-            <p className="text-center text-sm text-neutral-500 mt-6">
+            <p className="text-center text-sm text-neutral-500 mt-4">
+              <Link
+                href="/auth/forgot-password"
+                className="text-primary font-medium hover:underline"
+              >
+                Forgot your password?
+              </Link>
+            </p>
+
+            <p className="text-center text-sm text-neutral-500 mt-3">
               Don&apos;t have an account?{" "}
               <Link
                 href={`/auth/sign-up${message ? `?message=${encodeURIComponent(message)}` : ""}`}

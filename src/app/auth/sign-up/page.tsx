@@ -56,14 +56,20 @@ function SignUpForm() {
       return;
     }
 
-    const { error: authError } = await authClient.signUp.email({
-      email: emailVal,
-      name,
-      password,
-    });
+    try {
+      const result = await authClient.signUp.email({
+        email: emailVal,
+        name,
+        password,
+      });
 
-    if (authError) {
-      setError(authError.message || "Failed to create account.");
+      if (result.error) {
+        setError(result.error.message || "Failed to create account.");
+        setPending(false);
+        return;
+      }
+    } catch {
+      setError("Something went wrong. Please try again.");
       setPending(false);
       return;
     }
