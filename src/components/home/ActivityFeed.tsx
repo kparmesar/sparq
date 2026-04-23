@@ -43,7 +43,7 @@ export default function ActivityFeed({ projects, events, showcaseItems }: Activi
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Projects */}
-          <div className="rounded-2xl border border-neutral-200 bg-white p-5">
+          <div className="rounded-2xl border border-neutral-200 bg-white p-5 flex flex-col">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-bold text-neutral-900">Projects</h3>
               <Link
@@ -53,7 +53,7 @@ export default function ActivityFeed({ projects, events, showcaseItems }: Activi
                 View All →
               </Link>
             </div>
-            <div className="space-y-3">
+            <div className="space-y-3 flex-1">
               {latestProjects.length === 0 ? (
                 <p className="text-sm text-neutral-400 py-4 text-center">No projects yet.</p>
               ) : latestProjects.map((project, i) => (
@@ -93,7 +93,7 @@ export default function ActivityFeed({ projects, events, showcaseItems }: Activi
           </div>
 
           {/* Events */}
-          <div className="rounded-2xl border border-neutral-200 bg-white p-5">
+          <div className="rounded-2xl border border-neutral-200 bg-white p-5 flex flex-col">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-bold text-neutral-900">
                 Upcoming Events
@@ -105,7 +105,7 @@ export default function ActivityFeed({ projects, events, showcaseItems }: Activi
                 View All →
               </Link>
             </div>
-            <div className="space-y-3">
+            <div className="space-y-3 flex-1">
               {latestEvents.length === 0 ? (
                 <p className="text-sm text-neutral-400 py-4 text-center">No upcoming events.</p>
               ) : latestEvents.map((event, i) => (
@@ -147,7 +147,7 @@ export default function ActivityFeed({ projects, events, showcaseItems }: Activi
           </div>
 
           {/* Showcase */}
-          <div className="rounded-2xl border border-neutral-200 bg-white p-5">
+          <div className="rounded-2xl border border-neutral-200 bg-white p-5 flex flex-col">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-bold text-neutral-900">Showcase</h3>
               <Link
@@ -157,7 +157,7 @@ export default function ActivityFeed({ projects, events, showcaseItems }: Activi
                 View All →
               </Link>
             </div>
-            <div className="space-y-3">
+            <div className="space-y-3 flex-1">
               {latestShowcase.length === 0 ? (
                 <p className="text-sm text-neutral-400 py-4 text-center">No showcase items yet.</p>
               ) : latestShowcase.map((item, i) => (
