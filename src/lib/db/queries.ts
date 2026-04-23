@@ -20,12 +20,15 @@ export async function getProjects(filters?: {
   type?: string;
   status?: string;
   search?: string;
+  site?: string;
 }): Promise<Project[]> {
   const conditions = [];
   if (filters?.type && filters.type !== "all")
     conditions.push(eq(projects.type, filters.type as Project["type"]));
   if (filters?.status && filters.status !== "all")
     conditions.push(eq(projects.status, filters.status as Project["status"]));
+  if (filters?.site && filters.site !== "all")
+    conditions.push(sql`${filters.site} = ANY(${projects.site})`);
   if (filters?.search) {
     const term = `%${filters.search}%`;
     conditions.push(

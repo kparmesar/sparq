@@ -84,7 +84,22 @@ export default async function ProjectDetailPage({
             </p>
           </div>
 
-          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {project.site.length > 0 && (
+              <div className="rounded-xl border border-neutral-200 p-5">
+                <h3 className="text-sm font-semibold text-neutral-500 uppercase tracking-wider mb-3">
+                  Site(s)
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {project.site.map((s) => (
+                    <span key={s} className="px-3 py-1 text-sm bg-primary-light text-primary rounded-lg font-medium">
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className="rounded-xl border border-neutral-200 p-5">
               <h3 className="text-sm font-semibold text-neutral-500 uppercase tracking-wider mb-3">
                 Specialties

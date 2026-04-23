@@ -18,8 +18,9 @@ export default async function ProjectsPage({
   const type = typeof params.type === "string" ? params.type : undefined;
   const status = typeof params.status === "string" ? params.status : undefined;
   const search = typeof params.q === "string" ? params.q : undefined;
+  const site = typeof params.site === "string" ? params.site : undefined;
 
-  const projects = await getProjects({ type, status, search });
+  const projects = await getProjects({ type, status, search, site });
 
   return (
     <div>

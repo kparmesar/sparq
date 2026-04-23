@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { formatDate } from "@/lib/utils";
+import { SITE_OPTIONS } from "@/lib/constants";
 import type { Project } from "@/lib/db/schema";
 
 const TYPE_OPTIONS = ["all", "research", "qi", "audit"] as const;
@@ -36,6 +37,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
   const search = searchParams.get("q") ?? "";
   const typeFilter = searchParams.get("type") ?? "all";
   const statusFilter = searchParams.get("status") ?? "all";
+  const siteFilter = searchParams.get("site") ?? "all";
 
   function updateParams(key: string, value: string) {
     const params = new URLSearchParams(searchParams.toString());
@@ -47,7 +49,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
     router.push(`/projects?${params.toString()}`, { scroll: false });
   }
 
-  // Client-side filter for instant response (server already filtered, but this handles URL-only navigation)
+  // Client-side filter for instant response
   const filtered = projects.filter((p) => {
     const matchesSearch =
       search === "" ||
@@ -55,7 +57,8 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
       p.description.toLowerCase().includes(search.toLowerCase());
     const matchesType = typeFilter === "all" || p.type === typeFilter;
     const matchesStatus = statusFilter === "all" || p.status === statusFilter;
-    return matchesSearch && matchesType && matchesStatus;
+    const matchesSite = siteFilter === "all" || (p.site ?? []).includes(siteFilter);
+    return matchesSearch && matchesType && matchesStatus && matchesSite;
   });
 
   return (
@@ -107,6 +110,19 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
               {STATUS_OPTIONS.map((s) => (
                 <option key={s} value={s}>
                   {s === "all" ? "All Statuses" : s.charAt(0).toUpperCase() + s.slice(1)}
+                </option>
+              ))}
+            </select>
+
+            <select
+              value={siteFilter}
+              onChange={(e) => updateParams("site", e.target.value)}
+              className="px-4 py-2.5 rounded-xl border border-neutral-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary/30"
+            >
+              <option value="all">All Sites</option>
+              {SITE_OPTIONS.map((s) => (
+                <option key={s} value={s}>
+                  {s}
                 </option>
               ))}
             </select>
@@ -169,6 +185,14 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                       <span>{formatDate(project.startDate ?? "")}</span>
                     </div>
                     <div className="mt-3 flex flex-wrap gap-1.5">
+                      {(project.site ?? []).map((s) => (
+                        <span
+                          key={s}
+                          className="px-2 py-0.5 text-xs bg-primary-light text-primary rounded-md font-medium"
+                        >
+                          {s}
+                        </span>
+                      ))}
                       {(project.specialty ?? []).map((s) => (
                         <span
                           key={s}

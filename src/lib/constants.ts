@@ -15,6 +15,19 @@ export const NAV_LINKS = [
   { href: "/contact", label: "Contact" },
 ] as const;
 
+export const SITE_OPTIONS = [
+  "Bristol Royal Hospital for Children",
+  "St Michael's Hospital, Bristol",
+  "Southmead Hospital, Bristol",
+  "Gloucestershire Royal Hospital",
+  "Great Western Hospital, Swindon",
+  "Royal United Hospital, Bath",
+  "Musgrove Park Hospital, Taunton",
+  "Yeovil District Hospital",
+  "Weston General Hospital",
+  "North Devon District Hospital",
+] as const;
+
 export const STATS = [
   { label: "Active Projects", value: 24 },
   { label: "Network Members", value: 85 },

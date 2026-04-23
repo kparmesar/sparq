@@ -50,6 +50,7 @@ export const projects = pgTable("projects", {
   tags: text("tags").array().notNull().default([]),
   leadAuthors: text("lead_authors").array().notNull().default([]),
   startDate: timestamp("start_date", { mode: "string" }),
+  site: text("site").array().notNull().default([]),
   contactEmail: varchar("contact_email", { length: 255 }),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),

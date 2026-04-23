@@ -75,6 +75,7 @@ export async function createProject(formData: FormData) {
   const status = formData.get("status") as "active" | "completed" | "recruiting" | "planned";
   const leadAuthors = (formData.get("leadAuthors") as string).split(",").map((s) => s.trim()).filter(Boolean);
   const tags = (formData.get("tags") as string || "").split(",").map((s) => s.trim()).filter(Boolean);
+  const site = formData.getAll("site").map((s) => String(s)).filter(Boolean);
   const contactEmail = (formData.get("contactEmail") as string) || null;
 
   await db.insert(projects).values({
@@ -85,6 +86,7 @@ export async function createProject(formData: FormData) {
     status,
     leadAuthors,
     tags,
+    site,
     contactEmail,
     startDate: new Date().toISOString(),
   });
@@ -102,11 +104,12 @@ export async function updateProject(formData: FormData) {
   const status = formData.get("status") as "active" | "completed" | "recruiting" | "planned";
   const leadAuthors = (formData.get("leadAuthors") as string).split(",").map((s) => s.trim()).filter(Boolean);
   const tags = (formData.get("tags") as string || "").split(",").map((s) => s.trim()).filter(Boolean);
+  const site = formData.getAll("site").map((s) => String(s)).filter(Boolean);
   const contactEmail = (formData.get("contactEmail") as string) || null;
 
   await db
     .update(projects)
-    .set({ title, slug: slugify(title), description, type, status, leadAuthors, tags, contactEmail, updatedAt: new Date() })
+    .set({ title, slug: slugify(title), description, type, status, leadAuthors, tags, site, contactEmail, updatedAt: new Date() })
     .where(eq(projects.id, id));
 
   revalidatePath("/projects");

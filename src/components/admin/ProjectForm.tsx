@@ -1,4 +1,5 @@
 import type { Project } from "@/lib/db/schema";
+import { SITE_OPTIONS } from "@/lib/constants";
 
 interface Props {
   action: (formData: FormData) => Promise<void>;
@@ -6,6 +7,8 @@ interface Props {
 }
 
 export default function ProjectForm({ action, project }: Props) {
+  const selectedSites = project?.site ?? [];
+
   return (
     <form action={action} className="space-y-5 max-w-2xl">
       {project && <input type="hidden" name="id" value={project.id} />}
@@ -65,6 +68,26 @@ export default function ProjectForm({ action, project }: Props) {
           defaultValue={project?.description}
           className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary resize-y"
         />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-neutral-700 mb-1">
+          Site(s) <span className="text-neutral-400 font-normal">(select all that apply)</span>
+        </label>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 p-3 rounded-xl border border-neutral-200 bg-white max-h-52 overflow-y-auto">
+          {SITE_OPTIONS.map((site) => (
+            <label key={site} className="flex items-center gap-2 text-sm text-neutral-700 cursor-pointer hover:bg-neutral-50 rounded-lg px-2 py-1.5">
+              <input
+                type="checkbox"
+                name="site"
+                value={site}
+                defaultChecked={selectedSites.includes(site)}
+                className="rounded border-neutral-300 text-primary focus:ring-primary/30"
+              />
+              {site}
+            </label>
+          ))}
+        </div>
       </div>
 
       <div>
