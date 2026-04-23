@@ -1,11 +1,14 @@
 "use server";
 
 import { auth } from "@/lib/auth/server";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { upsertUserPreferences } from "@/lib/db/queries";
 
 export async function signOutAction() {
-  await auth.signOut();
+  await auth.api.signOut({
+    headers: await headers(),
+  });
   redirect("/");
 }
 
@@ -13,7 +16,9 @@ export async function updatePreferences(
   _prevState: { success?: boolean; error?: string } | null,
   formData: FormData
 ) {
-  const { data: session } = await auth.getSession();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
   if (!session?.user) {
     return { error: "You must be signed in." };
   }

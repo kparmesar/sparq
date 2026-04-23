@@ -1,6 +1,7 @@
 "use server";
 
 import { auth } from "@/lib/auth/server";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 export async function signInWithEmail(
@@ -14,13 +15,13 @@ export async function signInWithEmail(
     return { error: "Email and password are required." };
   }
 
-  const { error } = await auth.signIn.email({
-    email,
-    password,
+  const result = await auth.api.signInEmail({
+    body: { email, password },
+    headers: await headers(),
   });
 
-  if (error) {
-    return { error: error.message || "Invalid credentials." };
+  if (!result) {
+    return { error: "Invalid credentials." };
   }
 
   redirect("/account");

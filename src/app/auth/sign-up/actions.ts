@@ -1,6 +1,7 @@
 "use server";
 
 import { auth } from "@/lib/auth/server";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 export async function signUpWithEmail(
@@ -25,14 +26,13 @@ export async function signUpWithEmail(
     return { error: "Password must be at least 8 characters." };
   }
 
-  const { error } = await auth.signUp.email({
-    email,
-    name,
-    password,
+  const result = await auth.api.signUpEmail({
+    body: { email, name, password },
+    headers: await headers(),
   });
 
-  if (error) {
-    return { error: error.message || "Failed to create account." };
+  if (!result) {
+    return { error: "Failed to create account." };
   }
 
   redirect("/account");
