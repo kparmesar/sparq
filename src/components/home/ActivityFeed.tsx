@@ -41,9 +41,9 @@ export default function ActivityFeed({ projects, events, showcaseItems }: Activi
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Projects */}
-          <div className="flex flex-col">
+          <div className="rounded-2xl border border-neutral-200 bg-white p-5">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-bold text-neutral-900">Projects</h3>
               <Link
@@ -53,8 +53,10 @@ export default function ActivityFeed({ projects, events, showcaseItems }: Activi
                 View All →
               </Link>
             </div>
-            <div className="space-y-3 flex-1">
-              {latestProjects.map((project, i) => (
+            <div className="space-y-3">
+              {latestProjects.length === 0 ? (
+                <p className="text-sm text-neutral-400 py-4 text-center">No projects yet.</p>
+              ) : latestProjects.map((project, i) => (
                 <motion.div
                   key={project.id}
                   initial={{ opacity: 0, x: -20 }}
@@ -64,7 +66,7 @@ export default function ActivityFeed({ projects, events, showcaseItems }: Activi
                 >
                   <Link
                     href={`/projects/${project.slug}`}
-                    className="block rounded-xl bg-white p-4 border border-neutral-200 hover:shadow-md transition-all hover:-translate-y-0.5"
+                    className="block rounded-xl bg-neutral-50 p-4 hover:bg-neutral-100 transition-all"
                   >
                     <div className="flex items-center gap-2 mb-2">
                       <span
@@ -91,7 +93,7 @@ export default function ActivityFeed({ projects, events, showcaseItems }: Activi
           </div>
 
           {/* Events */}
-          <div className="flex flex-col">
+          <div className="rounded-2xl border border-neutral-200 bg-white p-5">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-bold text-neutral-900">
                 Upcoming Events
@@ -103,8 +105,10 @@ export default function ActivityFeed({ projects, events, showcaseItems }: Activi
                 View All →
               </Link>
             </div>
-            <div className="space-y-3 flex-1">
-              {latestEvents.map((event, i) => (
+            <div className="space-y-3">
+              {latestEvents.length === 0 ? (
+                <p className="text-sm text-neutral-400 py-4 text-center">No upcoming events.</p>
+              ) : latestEvents.map((event, i) => (
                 <motion.div
                   key={event.id}
                   initial={{ opacity: 0, x: -20 }}
@@ -114,7 +118,7 @@ export default function ActivityFeed({ projects, events, showcaseItems }: Activi
                 >
                   <Link
                     href={`/events/${event.slug}`}
-                    className="block rounded-xl bg-white p-4 border border-neutral-200 hover:shadow-md transition-all hover:-translate-y-0.5"
+                    className="block rounded-xl bg-neutral-50 p-4 hover:bg-neutral-100 transition-all"
                   >
                     <div className="flex items-start gap-3">
                       <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-primary-light flex flex-col items-center justify-center">
@@ -143,7 +147,7 @@ export default function ActivityFeed({ projects, events, showcaseItems }: Activi
           </div>
 
           {/* Showcase */}
-          <div className="flex flex-col">
+          <div className="rounded-2xl border border-neutral-200 bg-white p-5">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-bold text-neutral-900">Showcase</h3>
               <Link
@@ -153,8 +157,10 @@ export default function ActivityFeed({ projects, events, showcaseItems }: Activi
                 View All →
               </Link>
             </div>
-            <div className="space-y-3 flex-1">
-              {latestShowcase.map((item, i) => (
+            <div className="space-y-3">
+              {latestShowcase.length === 0 ? (
+                <p className="text-sm text-neutral-400 py-4 text-center">No showcase items yet.</p>
+              ) : latestShowcase.map((item, i) => (
                 <motion.div
                   key={item.id}
                   initial={{ opacity: 0, x: -20 }}
@@ -164,7 +170,7 @@ export default function ActivityFeed({ projects, events, showcaseItems }: Activi
                 >
                   <Link
                     href={`/showcase/${item.slug}`}
-                    className="block rounded-xl bg-white p-4 border border-neutral-200 hover:shadow-md transition-all hover:-translate-y-0.5"
+                    className="block rounded-xl bg-neutral-50 p-4 hover:bg-neutral-100 transition-all"
                   >
                     <span className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 mb-2">
                       {item.category}
