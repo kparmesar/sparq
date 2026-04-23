@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { getEvents } from "@/lib/db/queries";
 import EventList from "@/components/events/EventList";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "Events",
   description:

@@ -3,6 +3,8 @@ import { Suspense } from "react";
 import { getProjects } from "@/lib/db/queries";
 import ProjectList from "@/components/projects/ProjectList";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "Projects",
   description:

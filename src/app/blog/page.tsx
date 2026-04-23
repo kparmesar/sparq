@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { getBlogPosts } from "@/lib/db/queries";
 import BlogList from "@/components/blog/BlogList";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "Blog",
   description: "News, training tips, and insights from the SPARQ network.",

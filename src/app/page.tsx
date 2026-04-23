@@ -7,6 +7,8 @@ import ActivityFeed from "@/components/home/ActivityFeed";
 const FeatureCards = dynamic(() => import("@/components/home/FeatureCards"));
 const CTABanner = dynamic(() => import("@/components/home/CTABanner"));
 
+export const revalidate = 60;
+
 export default async function Home() {
   const [projects, events, showcaseItems] = await Promise.all([
     getLatestProjects(3),
