@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Suspense } from "react";
-import { authClient } from "@/lib/auth/client";
 
 const ALLOWED_DOMAINS = ["nhs.net", "bristol.ac.uk"];
 
@@ -57,14 +56,16 @@ function SignUpForm() {
     }
 
     try {
-      const result = await authClient.signUp.email({
-        email: emailVal,
-        name,
-        password,
+      const res = await fetch("/api/auth/sign-up/email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: emailVal, name, password }),
+        credentials: "include",
       });
 
-      if (result.error) {
-        setError(result.error.message || "Failed to create account.");
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        setError(data?.message || "Failed to create account.");
         setPending(false);
         return;
       }
@@ -74,8 +75,7 @@ function SignUpForm() {
       return;
     }
 
-    router.push("/account");
-    router.refresh();
+    router.push("/auth/sign-in?message=" + encodeURIComponent("Account created! Please check your email to verify your address, then sign in."));
   }
 
   return (

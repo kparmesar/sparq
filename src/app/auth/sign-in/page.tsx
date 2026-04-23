@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Suspense } from "react";
-import { authClient } from "@/lib/auth/client";
 
 function SignInForm() {
   const searchParams = useSearchParams();
@@ -12,10 +11,14 @@ function SignInForm() {
   const message = searchParams.get("message");
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
+  const [verifyEmail, setVerifyEmail] = useState("");
+  const [verificationSent, setVerificationSent] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
+    setVerifyEmail("");
+    setVerificationSent(false);
     setPending(true);
 
     const formData = new FormData(e.currentTarget);
@@ -29,13 +32,22 @@ function SignInForm() {
     }
 
     try {
-      const result = await authClient.signIn.email({
-        email,
-        password,
+      const res = await fetch("/api/auth/sign-in/email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+        credentials: "include",
       });
 
-      if (result.error) {
-        setError(result.error.message || "Invalid credentials.");
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        if (data?.code === "EMAIL_NOT_VERIFIED") {
+          setVerifyEmail(email);
+          setError("Please verify your email address before signing in. Check your inbox for a verification link.");
+          setPending(false);
+          return;
+        }
+        setError(data?.message || "Invalid credentials.");
         setPending(false);
         return;
       }
@@ -47,6 +59,20 @@ function SignInForm() {
 
     router.push("/account");
     router.refresh();
+  }
+
+  async function resendVerification() {
+    if (!verifyEmail) return;
+    try {
+      await fetch("/api/auth/send-verification-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: verifyEmail }),
+      });
+      setVerificationSent(true);
+    } catch {
+      // ignore
+    }
   }
 
   return (
@@ -73,6 +99,20 @@ function SignInForm() {
             {error && (
               <div className="mb-4 p-3 rounded-lg bg-red-50 text-red-700 text-sm font-medium">
                 {error}
+                {verifyEmail && !verificationSent && (
+                  <button
+                    type="button"
+                    onClick={resendVerification}
+                    className="block mt-2 text-primary font-medium hover:underline"
+                  >
+                    Resend verification email
+                  </button>
+                )}
+                {verificationSent && (
+                  <p className="mt-2 text-green-700">
+                    Verification email sent! Check your inbox.
+                  </p>
+                )}
               </div>
             )}
 
