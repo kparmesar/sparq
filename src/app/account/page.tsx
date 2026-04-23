@@ -1,15 +1,13 @@
 import { redirect } from "next/navigation";
-import { headers } from "next/headers";
-import { auth } from "@/lib/auth/server";
+import { getAuth } from "@/lib/auth/server";
 import { getUserPreferences } from "@/lib/db/queries";
 import PreferencesForm from "./PreferencesForm";
 
 export const dynamic = "force-dynamic";
 
 export default async function AccountPage() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const auth = getAuth();
+  const { data: session } = await auth.getSession();
   if (!session?.user) redirect("/auth/sign-in");
 
   const prefs = await getUserPreferences(session.user.id);

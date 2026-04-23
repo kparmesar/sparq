@@ -2,7 +2,7 @@ import { createNeonAuth } from "@neondatabase/auth/next/server";
 
 let _auth: ReturnType<typeof createNeonAuth> | null = null;
 
-function getAuth() {
+export function getAuth() {
   if (!_auth) {
     _auth = createNeonAuth({
       baseUrl: process.env.NEON_AUTH_BASE_URL!,
@@ -13,9 +13,3 @@ function getAuth() {
   }
   return _auth;
 }
-
-export const auth = new Proxy({} as ReturnType<typeof createNeonAuth>, {
-  get(_, prop) {
-    return (getAuth() as Record<string | symbol, unknown>)[prop];
-  },
-});
