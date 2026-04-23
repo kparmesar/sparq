@@ -21,7 +21,7 @@ export default function PreferencesForm({ prefs }: { prefs: UserPreference | nul
           Notification Preferences
         </h2>
         <p className="text-sm text-neutral-500 mb-6">
-          Choose what you&apos;d like to be notified about. Delivery coming soon.
+          Choose what you&apos;d like to be notified about.
         </p>
 
         {state?.success && (
@@ -37,13 +37,13 @@ export default function PreferencesForm({ prefs }: { prefs: UserPreference | nul
 
         <form action={formAction} className="space-y-6">
           {/* Event notifications */}
-          <div className="flex items-start gap-3">
+          <div className="flex items-center gap-3">
             <input
               type="checkbox"
               id="notifyEvents"
               name="notifyEvents"
               defaultChecked={prefs?.notifyEvents ?? false}
-              className="mt-0.5 rounded border-neutral-300 text-primary focus:ring-primary/30"
+              className="rounded border-neutral-300 text-primary focus:ring-primary/30"
             />
             <div>
               <label htmlFor="notifyEvents" className="text-sm font-medium text-neutral-900 cursor-pointer">
@@ -56,13 +56,13 @@ export default function PreferencesForm({ prefs }: { prefs: UserPreference | nul
           </div>
 
           {/* Project notifications */}
-          <div className="flex items-start gap-3">
+          <div className="flex items-center gap-3">
             <input
               type="checkbox"
               id="notifyProjects"
               name="notifyProjects"
               defaultChecked={prefs?.notifyProjects ?? false}
-              className="mt-0.5 rounded border-neutral-300 text-primary focus:ring-primary/30"
+              className="rounded border-neutral-300 text-primary focus:ring-primary/30"
             />
             <div>
               <label htmlFor="notifyProjects" className="text-sm font-medium text-neutral-900 cursor-pointer">
